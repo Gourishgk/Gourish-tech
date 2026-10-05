@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cyber Security Awareness Demo</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
+body{background:#f3f6fa;color:#172033;min-height:100vh}
+.header{background:linear-gradient(135deg,#07152f,#123b70);color:white;text-align:center;padding:35px 20px}
+.header h1{font-size:32px;margin-bottom:10px}.header p{font-size:15px;opacity:.9}
+.container{max-width:650px;margin:25px auto;padding:0 15px}
+.card{background:white;border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 5px 20px rgba(0,0,0,.08)}
+.card h2{font-size:20px;margin-bottom:10px}.card p{line-height:1.6;color:#555}
+button{width:100%;border:none;padding:14px;margin-top:15px;border-radius:10px;background:#1261c9;color:white;font-size:16px;cursor:pointer}
+.status{margin-top:12px;padding:12px;border-radius:8px;background:#eef4ff;font-size:14px}
+video{width:100%;margin-top:15px;border-radius:12px;background:#000;display:none}
+.warning{background:#fff4d6;border-left:5px solid #e3a400}
+.danger{background:#ffe7e7;border-left:5px solid #d93025}
+.success{background:#e7f7ed;border-left:5px solid #168544}
+input[type=file]{width:100%;margin-top:15px}
+footer{text-align:center;padding:25px;color:#777;font-size:13px}
+</style>
+</head>
+<body>
+<header class="header">
+<h1>🛡️ CYBER SECURITY</h1>
+<p>Cyber Security Awareness Demonstration</p>
+</header>
+
+<div class="container">
+<div class="card warning">
+<h2>⚠️ Think Before You Allow</h2>
+<p>A website may request access to your camera, location or files. Never grant permissions unless you understand why they are required and trust the website.</p>
+</div>
+
+<div class="card">
+<h2>📷 Camera Permission Demo</h2>
+<p>This demonstration requests camera permission and displays the live camera preview after permission is granted.</p>
+<button onclick="startCamera()">Allow Camera — Start Demo</button>
+<video id="camera" autoplay playsinline></video>
+<div id="cameraStatus" class="status">Camera permission has not been requested.</div>
+</div>
+
+<div class="card">
+<h2>📍 Location Permission Demo</h2>
+<p>Location information can reveal where you are. Only provide it to websites when it is genuinely necessary.</p>
+<button onclick="getLocation()">Allow Location — Start Demo</button>
+<div id="locationStatus" class="status">Location permission has not been requested.</div>
+</div>
+
+<div class="card">
+<h2>🖼️ Gallery / File Demo</h2>
+<p>This demonstrates voluntary file selection. Nothing is uploaded anywhere by this page.</p>
+<input type="file" id="fileInput" accept="image/*">
+<div id="fileStatus" class="status">No file selected.</div>
+</div>
+
+<div class="card">
+<h2>👤 Contacts Awareness</h2>
+<p>Websites should not be trusted with your contacts simply because they request access. Modern browsers also restrict direct contact access for security reasons.</p>
+<div class="status">🔒 Contacts are NOT accessed by this demonstration.</div>
+</div>
+
+<div class="card danger">
+<h2>🚨 Awareness Message</h2>
+<p>Imagine receiving a QR code after a long event. You scan it, open the website and repeatedly click <b>Allow</b> without checking what permissions are being requested.</p>
+<br>
+<p>This demonstration shows why you should stop and think before granting permissions to an unfamiliar website.</p>
+</div>
+
+<div class="card success">
+<h2>✅ Remember</h2>
+<p><b>Don't blindly click Allow.</b><br><br>Check the website address, understand the permission being requested and grant access only when necessary.</p>
+</div>
+</div>
+
+<footer>Cyber Security Awareness Demo<br>For educational purposes only</footer>
+
+<script>
+async function startCamera(){
+const video=document.getElementById("camera");
+const status=document.getElementById("cameraStatus");
+try{
+const stream=await navigator.mediaDevices.getUserMedia({video:true,audio:false});
+video.srcObject=stream;
+video.style.display="block";
+status.className="status success";
+status.innerHTML="✅ Camera permission granted. Live camera preview is active.<br><br>⚠️ Awareness point: only give camera access to websites you trust.";
+}catch(error){
+status.className="status danger";
+status.innerHTML="❌ Camera permission was denied or unavailable.<br><br>This is why you should review permission requests carefully.";
+}
+}
+
+function getLocation(){
+const status=document.getElementById("locationStatus");
+if(!navigator.geolocation){
+status.innerHTML="❌ Location services are not supported by this browser.";
+return;
+}
+status.innerHTML="Requesting location permission...";
+navigator.geolocation.getCurrentPosition(
+function(position){
+status.className="status success";
+status.innerHTML="✅ Location permission granted.<br><br>The browser provided location information to this page.<br><br>⚠️ Never give location access to an untrusted website.";
+},
+function(error){
+status.className="status danger";
+status.innerHTML="❌ Location permission was denied or unavailable.";
+});
+}
+
+document.getElementById("fileInput").addEventListener("change",function(){
+const status=document.getElementById("fileStatus");
+if(this.files.length>0){
+status.className="status success";
+status.innerHTML="✅ You selected: <b>"+this.files[0].name+"</b><br><br>This demonstration does not upload the file.";
+}else{
+status.innerHTML="No file selected.";
+}
+});
+</script>
+</body>
+</html>
